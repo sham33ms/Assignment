@@ -8,12 +8,6 @@ body{
     background-color: #081b29;
     color: white;
 }
-.image{
-    margin-left : 20px;
-    float: right;
-    width: 100px;
-    height: 100px;
-}
 .header{
     position: fixed;
     top: 0;
@@ -27,12 +21,6 @@ body{
     z-index: 100;
 
 }
-.logo{
-    font-size: 25px;
-    text-decoration: none;
-    color: white;
-    font-weight: 600;
-}
 .navbar a{
     font-size: 20px;
     text-decoration: none;
@@ -42,7 +30,7 @@ body{
     transition: 0.3s;
 }
 .navbar a:hover,
-.navbar a.active{
+a.active{
     color: #00abf0;
 }
 .home{
@@ -122,11 +110,12 @@ body{
     align-items: center;
     width: 40px;
     height: 40px;
-    background: transparent;
+    /* background: transparent; */
     border: 2px solid #00abf0;
     border-radius: 50%;
     font-size: 20px;
     color: #00abf0;
+    
     text-decoration: none;
     transition: 0.3s;
     
