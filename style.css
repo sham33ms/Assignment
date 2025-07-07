@@ -94,7 +94,7 @@ body{
     color: #00abf0;
 }
 .btn a:hover{
-    /* background: white; */
+    background: white;
     width: 200px;
 }
 .icon{
@@ -130,3 +130,8 @@ body{
     width: 45px;
     height: 45px;
 }  
+.about{
+    border: 3px solid #00abf0;
+    background: white;
+    color: #00abf0;
+}
