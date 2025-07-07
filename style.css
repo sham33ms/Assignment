@@ -29,8 +29,8 @@ body{
     margin-left: 35px;
     transition: 0.3s;
 }
-.navbar a:hover,
-a.active{
+.navbar a:hover
+{
     color: #00abf0;
 }
 .home{
@@ -38,7 +38,7 @@ a.active{
     margin-top: 200px;
     display: flex;
     align-items: center;
-    
+    gap: 150px;
     padding: 0 10%;
 }
 .home-content{
@@ -58,6 +58,12 @@ a.active{
 .home-content p{
     font-size: 15px;
     margin: 20px 0 40px;
+}
+.image{
+    height: 250px;
+    width: 250px;
+    border: 2px solid #00abf0;
+    border-radius: 50%;
 }
 .home-content .btn{
     display: flex;
