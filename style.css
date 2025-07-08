@@ -15,6 +15,7 @@ body{
     width: 100%;
     padding: 20px 10%;
     background-color: #00abf0;
+    color: #081b29;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,14 +26,14 @@ body{
 .navbar a{
     font-size: 20px;
     text-decoration: none;
-    color: white;
+    color: #081b29;
     font-weight: 500;
     margin-left: 35px;
     transition: 0.3s;
 }
 .navbar a:hover
 {
-    color: #081b29;
+    color: white    ;
 }
 .home{
     /* height: 100vh; */
@@ -153,6 +154,7 @@ body{
 .project-card:hover {
     transform: translateY(-10px);
     
+    
 }
 
 .project-title {
@@ -163,30 +165,23 @@ body{
     padding-bottom: 5px;
 }
 
+
 .project-card p {
     font-size: 15px;
     line-height: 1.5;
     color: #333;
 }
 .about {
-    background-color: white;
+    
     color: #081b29;
     border: 2px solid #00abf0;
     border-radius: 12px;
     padding: 25px 30px;
-    width: 100%;
+    width: 80%;
     max-width: 500px;
     transition:  0.3s;
 }
-
-.about:hover {
-    background-color: #081b29;
-    color: #00abf0;
-    
-}
-
 .about th, .about td {
-    text-align: left;
     padding: 12px 8px;
     font-size: 16px;
 }
