@@ -1,80 +1,51 @@
-const form = document.getElementById('feedbackForm');
-const output = document.getElementById('output');
-const message = document.getElementById('message');
-const charCount = document.getElementById('charCount');
 
-// Live character counter using DOM
-message.addEventListener('input', () => {
-  charCount.textContent = message.value.length;
+var form = document.getElementById('feedbackForm');
+var nameInput = document.getElementById('name');
+var emailInput = document.getElementById('email');
+var messageInput = document.getElementById('message');
+var charCount = document.getElementById('charCount');
+var output = document.getElementById('output');
+
+var feedbacks = [];
+
+if (localStorage.getItem('feedbacks')) {
+  feedbacks = JSON.parse(localStorage.getItem('feedbacks'));
+}
+
+messageInput.addEventListener('input', function () {
+  charCount.textContent = messageInput.value.length;
 });
 
-// Submission Manager Object
-const SubmissionManager = {
-  submissions: [],
-  saveToLocalStorage() {
-    localStorage.setItem('feedbacks', JSON.stringify(this.submissions));
-  },
-  loadFromLocalStorage() {
-    const data = localStorage.getItem('feedbacks');
-    if (data) this.submissions = JSON.parse(data);
-  },
-  add(submission) {
-    this.submissions.push(submission);
-    this.saveToLocalStorage();
-  }
-};
+// Submit form
+form.addEventListener('submit', function (event) {
+  event.preventDefault(); // stop page reload
 
-// Load existing data
-SubmissionManager.loadFromLocalStorage();
+  var name = nameInput.value.trim();
+  var email = emailInput.value.trim();
+  var message = messageInput.value.trim();
 
-// Event Listener on form
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const name = form.name.value.trim();
-  const email = form.email.value.trim();
-  const msg = form.message.value.trim();
-
-  // Validation using loop
-  for (const field of [name, email, msg]) {
-    if (field.length === 0) {
-      alert('All fields are required!');
-      return;
-    }
-  }
-
-  // Email format check
-  if (!email.includes('@')) {
-    alert('Invalid email format.');
+  if (name === '' || email === '' || message === '') {
+    alert('Please fill in all the fields.');
     return;
   }
 
-  const newFeedback = { name, email, message: msg };
 
-  // Simulate async saving
-  await fakeSaveAsync(newFeedback);
+  var newFeedback = {
+    name: name,
+    email: email,
+    message: message
+  };
 
-  // Save to localStorage
-  SubmissionManager.add(newFeedback);
+  
+  feedbacks.push(newFeedback);
 
-  // Clear form
+  
+  localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+
+  
   form.reset();
   charCount.textContent = '0';
 
-  showMessage("Feedback submitted successfully!");
+ 
+  output.textContent = 'Feedback submitted successfully!';
 });
-
-// Async function simulation
-const fakeSaveAsync = (data) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Saved:', data);
-      resolve();
-    }, 500); // simulate delay
-  });
-};
-
-// Arrow function to show output
-const showMessage = (msg) => {
-  output.textContent = msg;
-};
