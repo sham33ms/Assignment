@@ -1,4 +1,3 @@
-
 var form = document.getElementById('feedbackForm');
 var nameInput = document.getElementById('name');
 var emailInput = document.getElementById('email');
@@ -18,8 +17,12 @@ messageInput.addEventListener('input', function () {
 
 // Submit form
 form.addEventListener('submit', function (event) {
-  event.preventDefault(); // stop page reload
+  event.preventDefault();
+  handleSubmit(); 
+});
 
+
+async function handleSubmit() {
   var name = nameInput.value.trim();
   var email = emailInput.value.trim();
   var message = messageInput.value.trim();
@@ -29,23 +32,26 @@ form.addEventListener('submit', function (event) {
     return;
   }
 
+  try {
+    output.textContent = 'Submitting... please wait';
 
-  var newFeedback = {
-    name: name,
-    email: email,
-    message: message
-  };
+    await delay(1000); 
 
-  
-  feedbacks.push(newFeedback);
+    var newFeedback = {
+      name: name,
+      email: email,
+      message: message
+    };
 
-  
-  localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+    feedbacks.push(newFeedback);
+    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
 
-  
-  form.reset();
-  charCount.textContent = '0';
-
- 
-  output.textContent = 'Feedback submitted successfully!';
-});
+    form.reset();
+    charCount.textContent = '0';
+    output.textContent = 'Feedback submitted successfully!';
+  } 
+  catch (e) {
+    output.textContent = 'Error occurred.';
+    console.log(e);
+  }
+}
