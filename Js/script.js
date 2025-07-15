@@ -11,18 +11,18 @@ if (localStorage.getItem('feedbacks')) {
   feedbacks = JSON.parse(localStorage.getItem('feedbacks'));
 }
 
+// Update character count
 messageInput.addEventListener('input', function () {
   charCount.textContent = messageInput.value.length;
 });
 
-// Submit form
+//Form submission
 form.addEventListener('submit', function (event) {
   event.preventDefault();
-  handleSubmit(); 
-});
+  submitFeedback();});
 
-
-async function handleSubmit() {
+  async function submitFeedback() {
+  var name = nameInput.value.trim();
   var name = nameInput.value.trim();
   var email = emailInput.value.trim();
   var message = messageInput.value.trim();
@@ -32,11 +32,9 @@ async function handleSubmit() {
     return;
   }
 
-  try {
-    output.textContent = 'Submitting... please wait';
+  output.textContent = 'Submitting... please wait';
 
-    await delay(1000); 
-
+   setTimeout( ()=> {
     var newFeedback = {
       name: name,
       email: email,
@@ -48,10 +46,6 @@ async function handleSubmit() {
 
     form.reset();
     charCount.textContent = '0';
-    output.textContent = 'Feedback submitted successfully!';
-  } 
-  catch (e) {
-    output.textContent = 'Error occurred.';
-    console.log(e);
-  }
-}
+    output.textContent = 'Form submitted successfully ✅';
+  }, 1000); 
+};
