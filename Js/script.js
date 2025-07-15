@@ -12,29 +12,28 @@ if (localStorage.getItem('feedbacks')) {
 }
 
 // Update character count
-messageInput.addEventListener('input', function () {
+messageInput.addEventListener('input', ()=> {
   charCount.textContent = messageInput.value.length;
 });
 
 //Form submission
-form.addEventListener('submit', function (event) {
+form.addEventListener('submit',  (event)=> {
   event.preventDefault();
   submitFeedback();});
 
   async function submitFeedback() {
   var name = nameInput.value.trim();
-  var name = nameInput.value.trim();
   var email = emailInput.value.trim();
   var message = messageInput.value.trim();
 
-  if (name === '' || email === '' || message === '') {
+  if (name === '' || email === '' || message === '', name.length>5) {
     alert('Please fill in all the fields.');
     return;
   }
 
   output.textContent = 'Submitting... please wait';
 
-   setTimeout( ()=> {
+  setTimeout( ()=> {
     var newFeedback = {
       name: name,
       email: email,
@@ -46,6 +45,6 @@ form.addEventListener('submit', function (event) {
 
     form.reset();
     charCount.textContent = '0';
-    output.textContent = 'Form submitted successfully ✅';
+    output.textContent = 'Form submitted successfully ';
   }, 1000); 
 };
