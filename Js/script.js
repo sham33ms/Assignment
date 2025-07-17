@@ -26,7 +26,7 @@ form.addEventListener('submit',  (event)=> {
   var email = emailInput.value.trim();
   var message = messageInput.value.trim();
 
-  if (name === '' || email === '' || message === '', name.length>5) {
+  if (name === '' || email === '' || message === '') {
     alert('Please fill in all the fields.');
     return;
   }
