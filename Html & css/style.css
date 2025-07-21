@@ -196,7 +196,7 @@ body{
     color:  #00abf0;
     font-weight: 500;
 }
-.contact-form {
+/* .contact-form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -204,7 +204,7 @@ body{
   gap: 15px;
   width: 100%;
   padding-top: 50px;
-  /* background-color: red; */
+  
 }
 
 .contact-form input,
@@ -227,4 +227,52 @@ body{
   transition: 0.3s ;
 }
 
+ */
 
+
+.container {
+  max-width: 500px;
+  background: #00abf0;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+input, textarea {
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+button {
+  padding: 12px;
+  background: #081b29;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: black;
+}
+
+#output {
+  margin-top: 20px;
+  color: black;
+}
