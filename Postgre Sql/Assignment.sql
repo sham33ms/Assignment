@@ -1,156 +1,135 @@
-DROP TABLE IF EXISTS OrderItems, Orders, Products, Categories, Suppliers, Customers CASCADE;
+drop table if exists orderitems, orders, products, customers, suppliers, categories;
 
-
--- CATEGORIES
-CREATE TABLE Categories (
-    category_id SERIAL PRIMARY KEY,
-    category_name VARCHAR(50) NOT NULL
+create table categories (
+  category_id serial primary key,
+  category_name varchar(50) not null
 );
 
--- SUPPLIERS
-CREATE TABLE Suppliers (
-    supplier_id SERIAL PRIMARY KEY,
-    supplier_name VARCHAR(100) NOT NULL
+insert into categories (category_name) values 
+('electronics'), ('books'), ('groceries');
+
+create table suppliers (
+  supplier_id serial primary key,
+  supplier_name varchar(100) not null
 );
 
--- PRODUCTS
-CREATE TABLE Products (
-    product_id SERIAL PRIMARY KEY,
-    product_name VARCHAR(100) NOT NULL,
-    category_id INT REFERENCES Categories(category_id),
-    supplier_id INT REFERENCES Suppliers(supplier_id),
-    stock INT NOT NULL CHECK (stock >= 0),
-    price NUMERIC(10, 2) NOT NULL
+insert into suppliers (supplier_name) values 
+('samsung inc.'), ('penguin books'), ('freshfarm');
+
+create table products (
+  product_id serial primary key,
+  product_name varchar(100) not null,
+  category_id int references categories(category_id),
+  supplier_id int references suppliers(supplier_id),
+  price numeric(10, 2) not null,
+  stock int not null
 );
 
--- CUSTOMERS
-CREATE TABLE Customers (
-    customer_id SERIAL PRIMARY KEY,
-    customer_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL
+insert into products (product_name, category_id, supplier_id, price, stock) values 
+('smartphone', 1, 1, 15000.00, 10),
+('laptop', 1, 1, 45000.00, 3),
+('fiction book', 2, 2, 350.00, 0),
+('rice 1kg', 3, 3, 45.00, 25),
+('notebook', 2, 2, 70.00, 100);
+
+create index indx 
+on products (product_id);
+
+create table customers (
+  customer_id serial primary key,
+  customer_name varchar(100) not null,
+  email varchar(100) unique not null
 );
 
--- ORDERS
-CREATE TABLE Orders (
-    order_id SERIAL PRIMARY KEY,
-    customer_id INT REFERENCES Customers(customer_id),
-    order_date DATE NOT NULL
-);
+insert into customers (customer_name, email) values
+('shameem', 'shameem@gmail.com'),
+('anjali', 'anjali@gmail.com'),
+('pradeep', 'pradeep@gmail.com');
 
--- ORDER ITEMS
-CREATE TABLE OrderItems (
-    order_item_id SERIAL PRIMARY KEY,
-    order_id INT REFERENCES Orders(order_id),
-    product_id INT REFERENCES Products(product_id),
-    quantity INT NOT NULL CHECK (quantity > 0)
+create table orders (
+  order_id int primary key,
+  customer_id int references customers(customer_id),
+  order_date date
 );
 
 
+insert into orders (order_id, customer_id, order_date) values
+(1, 1, '2025-07-21'),
+(2, 1, '2025-07-22'),
+(3, 1, '2025-07-23'),
+(4, 1, '2025-07-24'),
+(5, 1, '2025-07-25'),
+(6, 1, '2025-07-26'),
 
--- CATEGORIES
-INSERT INTO Categories (category_name) VALUES 
-('Electronics'), ('Groceries'), ('Clothing');
+(7, 2, '2025-07-21'),
+(8, 2, '2025-07-22'),
+(9, 2, '2025-07-23'),
+(10, 2, '2025-07-24'),
+(11, 2, '2025-07-25'),
+(12, 2, '2025-07-26'),
 
--- SUPPLIERS
-INSERT INTO Suppliers (supplier_name) VALUES 
-('TechMart'), ('FreshFarm'), ('StyleHub');
+(13, 3, '2025-07-21'),
+(14, 3, '2025-07-22'),
+(15, 3, '2025-07-23'),
+(16, 3, '2025-07-24'),
+(17, 3, '2025-07-25'),
+(18, 3, '2025-07-26');
 
--- PRODUCTS
-INSERT INTO Products (product_name, category_id, supplier_id, stock, price) VALUES
-('Laptop', 1, 1, 10, 800.00),
-('Mobile', 1, 1, 0, 500.00), -- Out-of-stock
-('Apple', 2, 2, 100, 1.00),
-('T-shirt', 3, 3, 50, 15.00),
-('Jeans', 3, 3, 25, 30.00);
+create index idx1
+on orders(order_date);
 
--- CUSTOMERS
-INSERT INTO Customers (customer_name, email) VALUES
-('Shameem', 'shameem@example.com'),
-('Priya', 'priya@example.com'),
-('Rahul', 'rahul@example.com');
+create table orderitems (
+  order_item_id serial primary key,
+  order_id int references orders(order_id),
+  product_id int references products(product_id),
+  quantity int not null
+);
 
--- ORDERS - All within this week (starting 2025-07-21)
-INSERT INTO Orders (customer_id, order_date) VALUES
-(1, '2025-07-21'), (1, '2025-07-22'), (1, '2025-07-23'), (1, '2025-07-24'),
-(1, '2025-07-25'), (1, '2025-07-26'), (1, '2025-07-27'),
-(2, '2025-07-21'), (2, '2025-07-22'),
-(3, '2025-07-23'), (3, '2025-07-24');
+insert into orderitems (order_id, product_id, quantity) values
+(1, 1, 3), 
+(1, 4, 2),
+(2, 2, 1), 
+(2, 3, 1),
+(3, 1, 5),
+(4, 4, 1),
+(5, 1, 2),
+(6, 1, 1),
+(7, 1, 2),
+(8, 1, 2);
 
--- ORDER ITEMS (10+ times for some products)
-INSERT INTO OrderItems (order_id, product_id, quantity) VALUES
-(1, 1, 1), (2, 1, 1), (3, 1, 1), (4, 1, 1), (5, 1, 1), 
-(6, 1, 1), (7, 1, 1), (8, 1, 1), (9, 1, 1), (10, 1, 1), (11, 1, 1), -- 11 times Laptop
-(1, 3, 5), (2, 3, 4), (3, 4, 2);
+select p.product_name, sum(oi.quantity) 
+from orderitems oi
+join orders o on oi.order_id = o.order_id
+join products p on oi.product_id = p.product_id
+where o.order_date >= current_date - interval '30 days'
+group by p.product_name
+having sum(oi.quantity) > 10;
 
+select c.category_name, sum(oi.quantity * p.price) as total_sales
+from orderitems oi
+join orders o on oi.order_id = o.order_id
+join products p on oi.product_id = p.product_id
+join categories c on p.category_id = c.category_id
+where date_trunc('quarter', o.order_date) = date_trunc('quarter', current_date)
+group by c.category_name;
 
-select * from OrderItems
-select * from OrderItems
-select * from Orders
-select * from OrderItems
--- Products ordered > 10 times in last 30 days
-
-SELECT 
-    p.product_id, 
-    p.product_name, 
-    SUM(oi.quantity) AS total_ordered
-FROM 
-    Products p
-JOIN 
-    OrderItems oi ON p.product_id = oi.product_id
-JOIN 
-    Orders o ON o.order_id = oi.order_id
-WHERE 
-    o.order_date >= CURRENT_DATE - INTERVAL '30 days'
-GROUP BY 
-    p.product_id, p.product_name
-HAVING 
-    SUM(oi.quantity) > 10;
-	
-
-
---total sales in this quarter
-SELECT 
-    c.category_name, 
-    SUM(oi.quantity * p.price) AS total_sales
-FROM 
-    Categories c
-JOIN 
-    Products p ON p.category_id = c.category_id
-JOIN 
-    OrderItems oi ON p.product_id = oi.product_id
-JOIN 
-    Orders o ON oi.order_id = o.order_id
-WHERE 
-    DATE_TRUNC('quarter', o.order_date) = DATE_TRUNC('quarter', CURRENT_DATE)
-GROUP BY 
-    c.category_name;
-
-
-
---Customers with > 5 orders this week
-
-SELECT 
+select 
     cu.customer_id, 
     cu.customer_name, 
-    COUNT(o.order_id) AS orders_this_week
-FROM 
-    Customers cu
-JOIN 
-    Orders o ON cu.customer_id = o.customer_id
-WHERE 
-    o.order_date >= DATE_TRUNC('week', CURRENT_DATE)
-GROUP BY 
+    count(o.order_id) as orders_this_week
+from 
+    customers cu
+join 
+    orders o on cu.customer_id = o.customer_id
+where 
+    o.order_date between '2025-07-21' and '2025-07-27'
+group by 
     cu.customer_id, cu.customer_name
-HAVING 
-    COUNT(o.order_id) > 5;
+having 
+    count(o.order_id) > 5;
 
---Suppliers with out-of-stock items
-SELECT 
-    s.supplier_id, 
-    s.supplier_name
-FROM 
-    Suppliers s
-JOIN 
-    Products p ON s.supplier_id = p.supplier_id
-WHERE 
-    p.stock = 0;
+select s.supplier_name, p.product_name
+from suppliers s
+join products p on s.supplier_id = p.supplier_id
+where p.stock = 0;
+
