@@ -4,7 +4,7 @@ import DataService from '../api/data.service';
 import SummaryCards from '../components/dashboard/SummaryCards';
 import DataFilters from '../components/dashboard/DataFilters';
 import EventsLineChart from '../components/charts/EventsLineChart';
-import CategoryPieChart from '../components/charts/CategoryPieChart';
+// import CategoryPieChart from '../components/charts/CategoryPieChart';
 import MetricsBarChart from '../components/charts/MetricsBarChart';
 import DataEntryForm from '../components/dashboard/DataEntryForm';
 
@@ -12,7 +12,7 @@ const DashboardPage = () => {
   // State definitions for all data and UI controls
   const [summaryData, setSummaryData] = useState({});
   const [lineChartData, setLineChartData] = useState([]);
-  const [pieChartData, setPieChartData] = useState([]);
+  // const [pieChartData, setPieChartData] = useState([]);
   const [barChartData, setBarChartData] = useState([]);
   const [filters, setFilters] = useState({});
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -29,16 +29,16 @@ const DashboardPage = () => {
           Object.entries(filters).filter(([_, v]) => v != null)
         );
 
-        const [summaryRes, lineChartRes, pieChartRes, barChartRes] = await Promise.all([
+        const [summaryRes, lineChartRes, barChartRes] = await Promise.all([
           DataService.getSummary(cleanFilters),
           DataService.getEventsOverTime(cleanFilters),
-          DataService.getEventCategoryDistribution(cleanFilters),
+          // DataService.getEventCategoryDistribution(cleanFilters),
           DataService.getMetricsByUser()
         ]);
         
         setSummaryData(summaryRes.data);
         setLineChartData(lineChartRes.data);
-        setPieChartData(pieChartRes.data);
+        // setPieChartData(pieChartRes.data);
         setBarChartData(barChartRes.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch dashboard data.");
@@ -59,6 +59,12 @@ const DashboardPage = () => {
     setRefreshTrigger(prev => prev + 1);
   };
 
+  const handleExport = () => {
+    console.log('[DEBUG] Export button clicked. Current filters:', filters);
+    // Directly call the export service with the current filters
+    DataService.exportData(filters);
+  };
+
   return (
     <Space direction="vertical" size="large" style={{ display: 'flex' }}>
       {error && <Alert message="Error" description={error} type="error" showIcon />}
@@ -71,7 +77,9 @@ const DashboardPage = () => {
         <Col xs={24} xl={16}>
           <Space direction="vertical" size="large" style={{ display: 'flex' }}>
             <EventsLineChart data={lineChartData} loading={loading} />
-            <CategoryPieChart data={pieChartData} loading={loading} />
+            {/* <CategoryPieChart data={pieChartData} loading={loading} /> */}
+                  {/* <DataFilters onFilterChange={handleFilterChange} onExport={handleExport} />  */}
+
           </Space>
         </Col>
 

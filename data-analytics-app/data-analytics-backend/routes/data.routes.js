@@ -17,9 +17,15 @@ module.exports = function(app) {
   // Existing routes, now smarter with more filters
   app.get("/api/data/summary", [verifyToken], controller.getSummary);
   app.get("/api/data/charts/events-over-time", [verifyToken], controller.getEventsOverTime);
-  app.get("/api/data/charts/event-category-distribution", [verifyToken], controller.getEventCategoryDistribution);
+  // app.get("/api/data/charts/event-category-distribution", [verifyToken], controller.getEventCategoryDistribution); 
   app.get("/api/data/charts/metrics-by-user", [verifyToken], controller.getMetricsByUser);
 
   // POST route for creating data
   app.post("/api/data/events", [verifyToken], controller.createEvent);
+
+  app.get("/api/data/export", [verifyToken], controller.exportData);
 };
+
+
+
+
