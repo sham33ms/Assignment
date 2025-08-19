@@ -1,8 +1,6 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
-// const path = require('path'); // No longer needed
-// const fs = require('fs'); // No longer needed
 require('dotenv').config();
 
 const app = express();
@@ -11,15 +9,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// This block is no longer needed for PostgreSQL
-// const dbDir = path.join(__dirname, 'database');
-// if (!fs.existsSync(dbDir)) {
-//     fs.mkdirSync(dbDir);
-// }
-
 // Database sync
 const db = require("./models");
-// Use {force: true} to drop tables and re-sync. Be careful with this in production.
+
 db.sequelize.sync({ force: false }).then(() => {
   console.log("Database synced successfully with PostgreSQL.");
 });

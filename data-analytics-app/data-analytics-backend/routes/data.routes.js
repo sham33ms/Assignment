@@ -14,10 +14,9 @@ module.exports = function(app) {
   // NEW route to get a list of users for filtering
   app.get("/api/data/users", [verifyToken], controller.getUsers);
 
-  // Existing routes, now smarter with more filters
+  // Existing routes
   app.get("/api/data/summary", [verifyToken], controller.getSummary);
   app.get("/api/data/charts/events-over-time", [verifyToken], controller.getEventsOverTime);
-  // app.get("/api/data/charts/event-category-distribution", [verifyToken], controller.getEventCategoryDistribution); 
   app.get("/api/data/charts/metrics-by-user", [verifyToken], controller.getMetricsByUser);
 
   // POST route for creating data

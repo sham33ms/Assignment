@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const Event = db.Event;
 const User = db.User;
 const Metric = db.Metric;
-const Report = db.Report; // You were missing this import
+const Report = db.Report; 
 
 const createWhereClause = (queryParams) => {
     const { startDate, endDate, userId, category } = queryParams;
@@ -17,17 +17,16 @@ const createWhereClause = (queryParams) => {
     return where;
 };
 
-// --- THIS FUNCTION IS NOW CORRECTED ---
+
 exports.getSummary = async (req, res) => {
     try {
         const where = createWhereClause(req.query);
 
-        // FIX: Added the totalUsers calculation
+        
         const totalUsers = await User.count();
         const totalEvents = await Event.count({ where });
         const totalReports = await Report.count({ where: where.userId ? { userId: where.userId } : {} });
 
-        // FIX: Added totalUsers to the response
         res.status(200).send({ totalUsers, totalEvents, totalReports });
 
     } catch (error) {
@@ -35,7 +34,6 @@ exports.getSummary = async (req, res) => {
     }
 };
 
-// --- All other functions ---
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.findAll({ attributes: ['id', 'username'] });
@@ -145,15 +143,13 @@ exports.exportData = async (req, res) => {
 
         const fileName = `analytics_export_${new Date().toISOString().split('T')[0]}.csv`;
 
-        // --- NEW LOGIC: Create a new report record in the database ---
         await Report.create({
             name: `Exported Report - ${new Date().toLocaleString()}`,
-            filters: req.query, // Store the filters used for this export
-            filePath: `/exports/${fileName}`, // Store a path for the file
-            userId: req.userId // Associate the report with the logged-in user
+            filters: req.query, 
+            filePath: `/exports/${fileName}`, 
+            userId: req.userId 
         });
         
-        // --- Convert JSON to CSV (this part is the same) ---
         const header = 'ID,Type,Category,Details (JSON),Timestamp,User\n';
         const csvRows = events.map(event => {
             return [
@@ -167,7 +163,7 @@ exports.exportData = async (req, res) => {
         });
         const csv = header + csvRows.join('\n');
 
-        // --- Set Headers for File Download (this part is the same) ---
+        
         res.header('Content-Type', 'text/csv');
         res.attachment(fileName);
         

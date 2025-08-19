@@ -8,9 +8,9 @@ const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
     // --- START: FORCEFULLY DISABLE CACHING ---
-    "Cache-Control": "no-cache, no-store, must-revalidate",
-    "Pragma": "no-cache",
-    "Expires": "0",
+    // "Cache-Control": "no-cache, no-store, must-revalidate",
+    // "Pragma": "no-cache",
+    // "Expires": "0",
     // --- END: FORCEFULLY DISABLE CACHING ---
   },
 });
